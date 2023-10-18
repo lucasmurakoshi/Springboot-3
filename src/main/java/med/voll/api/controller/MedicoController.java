@@ -62,6 +62,7 @@ public class MedicoController {
         var datosMedico = new DatosRespuestaMedico(medico.getId(), medico.getNombre(), medico.getEmail(), medico.getTelefono(), medico.getDocumento(), medico.getEspecialidad().toString(),
                 new DatosDireccion(medico.getDireccion().getCalle(), medico.getDireccion().getDistrito(), medico.getDireccion().getCiudad(), medico.getDireccion().getNumero(),
                         medico.getDireccion().getComplemento()));
+
         return ResponseEntity.ok(datosMedico);
     }
 }

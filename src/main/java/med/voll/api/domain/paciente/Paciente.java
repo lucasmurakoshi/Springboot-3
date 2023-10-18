@@ -14,6 +14,7 @@ import med.voll.api.domain.direccion.Direccion;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Paciente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +22,8 @@ public class Paciente {
     private String email;
     private String documento;
     private String telefono;
-    private Direccion direcion;
+    @Embedded
+    private Direccion direccion;
     private Boolean activo;
 
     public Paciente(DatosRegistroPaciente datosRegistroPaciente){
@@ -29,8 +31,29 @@ public class Paciente {
         this.email = datosRegistroPaciente.email();
         this.documento = datosRegistroPaciente.documento();
         this.telefono = datosRegistroPaciente.telefono();
-        this.direcion = new Direccion(datosRegistroPaciente.direccion());
+        this.direccion = new Direccion(datosRegistroPaciente.direccion());
         this.activo = true;
     }
 
+    public void desactivarPaciente() {
+        this.activo = false;
+    }
+
+    public void actualizarDatos(DatosActualizarPaciente datosActualizarPaciente) {
+        if(datosActualizarPaciente.nombre() != null){
+            this.nombre = datosActualizarPaciente.nombre();
+        }
+        if(datosActualizarPaciente.documento() != null){
+            this.documento = datosActualizarPaciente.documento();
+        }
+        if(datosActualizarPaciente.telefono() != null){
+            this.telefono = datosActualizarPaciente.telefono();
+        }
+        if(datosActualizarPaciente.email() != null){
+            this.email = datosActualizarPaciente.email();
+        }
+        if(datosActualizarPaciente.direccion() != null){
+            this.direccion = direccion.actualizarDatos(datosActualizarPaciente.direccion());
+        }
+    }
 }
