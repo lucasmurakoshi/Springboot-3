@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PacienteController {
     @Autowired
     private PacienteRepository repository;
+
     @PostMapping
     @Transactional
     public void registrar(@RequestBody @Valid DatosRegistroPaciente datos){
