@@ -19,7 +19,7 @@ public class Paciente {
     private Long id;
     private String nombre;
     private String email;
-    private String documentoIdentidad;
+    private String documento;
     private String telefono;
     private Direccion direcion;
     private Boolean activo;
@@ -27,7 +27,7 @@ public class Paciente {
     public Paciente(DatosRegistroPaciente datosRegistroPaciente){
         this.nombre = datosRegistroPaciente.nombre();
         this.email = datosRegistroPaciente.email();
-        this.documentoIdentidad = datosRegistroPaciente.documentoIdentidad();
+        this.documento = datosRegistroPaciente.documento();
         this.telefono = datosRegistroPaciente.telefono();
         this.direcion = new Direccion(datosRegistroPaciente.direccion());
         this.activo = true;

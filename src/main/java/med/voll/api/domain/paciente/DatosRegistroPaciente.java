@@ -14,7 +14,7 @@ public record DatosRegistroPaciente(
         @NotBlank
         String telefono,
         @NotBlank
-        String documentoIdentidad,
+        String documento,
         @NotNull @Valid
         DatosDireccion direccion) {
 }
