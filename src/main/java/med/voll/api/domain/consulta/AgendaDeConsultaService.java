@@ -1,5 +1,6 @@
 package med.voll.api.domain.consulta;
 
+import med.voll.api.domain.consulta.validaciones.ValidadorCancelamientoConsultas;
 import med.voll.api.domain.consulta.validaciones.ValidadorDeConsultas;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
@@ -23,6 +24,9 @@ public class AgendaDeConsultaService {
     @Autowired
     List<ValidadorDeConsultas> validadores;
 
+    @Autowired
+    List<ValidadorCancelamientoConsultas> validadoresCancelamiento;
+
     public DatosDetallesConsulta agendar(DatosAgendarConsulta datosAgendarConsulta){
 
         if(!pacienteRepository.findById(datosAgendarConsulta.idPaciente()).isPresent()){
@@ -42,7 +46,7 @@ public class AgendaDeConsultaService {
             throw new ValidacionDeIntegridad("no existen medicos disponibles para este horario y especialidad");
         }
 
-        var consulta = new Consulta(null, medico, paciente, datosAgendarConsulta.fecha());
+        var consulta = new Consulta(medico, paciente, datosAgendarConsulta.fecha());
         consultaRepository.save(consulta);
 
         return new DatosDetallesConsulta(consulta);
@@ -57,5 +61,16 @@ public class AgendaDeConsultaService {
         }
 
         return medicoRepository.seleccionarMedicoConEspecialidadEnFecha(datosAgendarConsulta.especialidad(), datosAgendarConsulta.fecha());
+    }
+
+    public void cancelarConsulta(DatosCancelarConsulta datosCancelarConsulta){
+        if(!consultaRepository.existsById(datosCancelarConsulta.id())){
+            throw new ValidacionDeIntegridad("El id de consulta seleccionado no existe");
+        }
+
+        validadoresCancelamiento.forEach(v->v.validar(datosCancelarConsulta));
+
+        var consulta = consultaRepository.getReferenceById(datosCancelarConsulta.id());
+        consulta.eliminarConsulta(datosCancelarConsulta.motivoCancelamiento());
     }
 }

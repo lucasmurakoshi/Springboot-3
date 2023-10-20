@@ -17,7 +17,7 @@ public class HorarioDeAnticipacion implements ValidadorDeConsultas{
 
         var diferenciaHoraria30min = Duration.between(ahora, horaDeConsulta).toMinutes()<30;
         if(diferenciaHoraria30min){
-            throw new ValidationException("El horario de atención de la clínica es de lunes a sábado, de 07:00 a 19:00 horas");
+            throw new ValidationException("La consulta debe programarse con al menos 30' de anticipacion");
         }
     }
 }
