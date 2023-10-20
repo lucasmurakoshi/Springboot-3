@@ -1,5 +1,7 @@
 package med.voll.api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import med.voll.api.domain.direccion.DatosDireccion;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/paciente")
+@SecurityRequirement(name = "bearer-key")
 public class PacienteController {
 
     @Autowired
@@ -19,6 +22,11 @@ public class PacienteController {
 
     @PostMapping
     @Transactional
+    @Operation(
+            summary = "registrar paciente en la base de datos",
+            description = "",
+            tags = {"consulta", "post"}
+    )
     public void registrar(@RequestBody @Valid DatosRegistroPaciente datos){
         pacienteRepository.save(new Paciente(datos));
     }
@@ -27,6 +35,11 @@ public class PacienteController {
 
     @PutMapping
     @Transactional
+    @Operation(
+            summary = "actualizar paciente agendado de la base de datos",
+            description = "",
+            tags = {"consulta", "put"}
+    )
     public ResponseEntity<DatosRespuestaPaciente> actualizarPaciente(@RequestBody @Valid DatosActualizarPaciente datosActualizarPaciente){
         Paciente paciente = pacienteRepository.getReferenceById(datosActualizarPaciente.id());
         paciente.actualizarDatos(datosActualizarPaciente);
@@ -37,6 +50,11 @@ public class PacienteController {
 
     @DeleteMapping("/{id}")
     @Transactional
+    @Operation(
+            summary = "eliminar paciente agendado de la base de datos",
+            description = "",
+            tags = {"consulta", "delete"}
+    )
     public ResponseEntity eliminarPaciente(@PathVariable Long id){
         Paciente paciente = pacienteRepository.getReferenceById(id);
         paciente.desactivarPaciente();
@@ -44,6 +62,11 @@ public class PacienteController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "consultar paciente agendado por id de la base de datos",
+            description = "",
+            tags = {"consulta", "get"}
+    )
     public ResponseEntity<DatosRespuestaPaciente> retornarPaciente(@PathVariable Long id){
         Paciente paciente = pacienteRepository.getReferenceById(id);
         var datosPaciente = new DatosRespuestaPaciente(paciente.getId(), paciente.getNombre(), paciente.getEmail(), paciente.getDocumento(), paciente.getTelefono(),
