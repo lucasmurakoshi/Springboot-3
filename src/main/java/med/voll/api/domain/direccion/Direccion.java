@@ -1,14 +1,14 @@
 package med.voll.api.domain.direccion;
 
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Embeddable
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@Builder
 public class Direccion {
     private String calle;
     private String numero;

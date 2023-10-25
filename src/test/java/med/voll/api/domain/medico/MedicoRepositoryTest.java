@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 
-import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -47,6 +47,29 @@ class MedicoRepositoryTest {
         System.out.println(medicoLibre);
         assertThat(medicoLibre).isNull();
 
+    }
+
+    @Test
+    @DisplayName("deberia retornar un medico cuando realice la consulta en la base de datos para ese horario")
+    void seleccionarMedicoConEspecialidadEnFechaEscenario2() {
+        var proximoLunes10H = LocalDate.now()
+                .with(TemporalAdjusters.next(DayOfWeek.MONDAY))
+                .atTime(10,0);
+
+        var medico=registrarMedico("Jose", "j@mail.com","123456", Especialidad.PEDIATRIA);
+        var medicoLibre = medicoRepository.seleccionarMedicoConEspecialidadEnFecha(Especialidad.PEDIATRIA, proximoLunes10H);
+
+
+        assertThat(medicoLibre).isEqualTo(medico);
+    }
+
+    @Test
+    @DisplayName("deberia retornar true si es que el idMedico pasado se encuentra activo")
+    void findActivoById() {
+        var medico = registrarMedico("Jose", "j@mail.com","123456", Especialidad.PEDIATRIA);
+        var medicoActivo = medicoRepository.findActivoById(medico.getId());
+
+        assertThat(medicoActivo).isTrue();
     }
 
     private void registrarConsulta(Medico medico, Paciente paciente, LocalDateTime fecha){

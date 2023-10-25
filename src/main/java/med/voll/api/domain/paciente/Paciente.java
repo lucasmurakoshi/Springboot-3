@@ -1,10 +1,7 @@
 package med.voll.api.domain.paciente;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import med.voll.api.domain.direccion.Direccion;
 
 @Table(name = "pacientes")
@@ -13,6 +10,8 @@ import med.voll.api.domain.direccion.Direccion;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString
 public class Paciente {
 
     @Id
@@ -24,7 +23,8 @@ public class Paciente {
     private String telefono;
     @Embedded
     private Direccion direccion;
-    private Boolean activo;
+    @Builder.Default
+    private Boolean activo=true;
 
     public Paciente(DatosRegistroPaciente datosRegistroPaciente){
         this.nombre = datosRegistroPaciente.nombre();
