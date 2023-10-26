@@ -23,14 +23,14 @@ public class SecurityConfigurations {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Le indicamos a Spring el tipo de sesion
-                .and().authorizeRequests()
-                .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+        return httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement((session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))) // Le indicamos a spring el tipo de sesion, la politica de creacion es STATELESS
+                .authorizeHttpRequests((request -> request.requestMatchers(HttpMethod.POST, "/login") // Cada request que haga match del tipo post y va para el login
+                        .permitAll() // Concede todos los permisos
+                        .anyRequest() // Los request que vayan despues
+                        .authenticated() // Debe ser autenticados
+                )).build(); // Al final construye el objeto
     }
 
     @Bean
